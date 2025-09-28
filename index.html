@@ -1,0 +1,811 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Y&B CARS — Продаж авто з пробігом та нових</title>
+  <meta name="description" content="Y&B CARS — купівля та продаж авто. Перевірені автомобілі, фінансування, трейд‑ін, гарантія.">
+  <meta property="og:title" content="Y&B CARS — Продаж авто" />
+  <meta property="og:description" content="Перевірені авто, чесна історія, зручний підбір." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://picsum.photos/1200/630?auto=compress" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='100%25' height='100%25' fill='%23000'/%3E%3Ctext x='50%25' y='54%25' font-size='34' text-anchor='middle' fill='white' font-family='Arial,Helvetica,sans-serif'%3EYB%3C/text%3E%3C/svg%3E">
+  <style>
+    :root{
+      --bg:#0b0d12;
+      --card:#11141b;
+      --muted:#6f7b91;
+      --brand:#2dd4bf; /* бірюзовий акцент */
+      --brand-2:#60a5fa; /* синій акцент */
+      --text:#e6e9ef;
+      --ok:#22c55e;
+      --danger:#ef4444;
+      --radius:14px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+html, body {
+  margin: 0;
+  height: 100%;
+  background: 
+    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+    url("ybcars.jpg") no-repeat center center fixed;
+  background-size: cover;          /* картинка на всю сторінку */
+  background-attachment: fixed;    /* ефект паралаксу */
+  color: var(--text);
+  font-family: Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+
+  /* плавна поява */
+  opacity: 0;
+  animation: fadeIn 1.5s ease-in-out forwards,
+             parallaxMove 30s linear infinite; /* повільний рух фону */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* анімація легкого руху фону */
+@keyframes parallaxMove {
+  from { background-position: center 0; }
+  to { background-position: center 100%; }
+}
+
+    a{color:inherit;text-decoration:none}
+    img{display:block;max-width:100%;height:auto}
+    .container{width:min(1160px, 92vw);margin-inline:auto}
+    .topbar{font-size:.9rem;color:#c7cfdb;border-bottom:1px solid #1a2131;background:#0b0d12}
+    .topbar .container{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:.6rem 0}
+    .badge{display:inline-flex;align-items:center;gap:.5rem;background:#0e1526;border:1px solid #1f2a44;padding:.35rem .6rem;border-radius:999px}
+    header.nav{position:sticky;top:0;z-index:50;background:#0b0d12e6;backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid #141a29}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0; gap:12px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.4px}
+    .logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;color:#00131a;font-weight:900}
+    .brand small{display:block;font-weight:500;color:var(--muted);letter-spacing:.2px}
+    .nav-links{display:flex;gap:22px;align-items:center}
+    .nav-links a{opacity:.9}
+    .nav-cta{display:flex;gap:10px;align-items:center}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;border:1px solid #1b2436;background:#0f1627;padding:.75rem 1rem;border-radius:12px;color:#eaf2ff;cursor:pointer;transition:.2s box-shadow,.2s transform,.2s border-color}
+    .btn:hover{box-shadow:var(--shadow);transform:translateY(-1px);border-color:#24304c}
+    .btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#051018;border:none}
+    .btn.ghost{background:transparent}
+    .mobile-toggle{display:none}
+    /* Hero */
+    .hero{padding:42px 0 24px;display:grid;gap:26px}
+    .hero-grid{display:grid;grid-template-columns: 1.15fr .85fr; gap:26px}
+    .hero-card{background:radial-gradient(1200px 400px at -15% -20%, #1a2540 0%, transparent 45%), #0f1320;border:1px solid #1a2240;border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .hero h1{font-size:clamp(28px, 3.4vw, 44px); line-height:1.05;margin:0 0 10px}
+    .hero p.lead{margin:0 0 18px;color:#c3ccda;max-width:60ch}
+    .hero-stats{display:flex;gap:20px;flex-wrap:wrap;margin-top:10px}
+    .chip{background:#10192e;border:1px solid #1f2a44;color:#cfe3ff;padding:.5rem .7rem;border-radius:999px;font-size:.9rem}
+    .search-card{background:#0e1426;border:1px solid #1e2740;border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+    .filters{display:grid;grid-template-columns:repeat(6,1fr); gap:10px}
+    .filters .field{display:flex;flex-direction:column;gap:6px}
+    label{font-size:.82rem;color:#a9b6cb}
+    select,input{width:100%;padding:.7rem .8rem;border-radius:10px;border:1px solid #23304d;background:#0a1224;color:#e6ecfa}
+    .filters .full{grid-column:1/-1}
+    .filters .half{grid-column: span 3}
+    .filters .third{grid-column: span 2}
+    /* Catalog */
+    .section{padding:34px 0}
+    .section h2{font-size:clamp(22px,2.5vw,32px);margin:0 0 6px}
+    .section p.sub{color:#c7cfdb;margin:0 0 18px}
+    .catalog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{background:linear-gradient(180deg,#0d1220,#0b0f1c);border:1px solid #1a2240;border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+    .card .media{position:relative;aspect-ratio:16/10;overflow:hidden}
+    .card .media img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease}
+    .card:hover .media img{transform:scale(1.06)}
+    .pill{position:absolute;left:10px;top:10px;background:#0f182c;border:1px solid #213055;color:#cfe3ff;padding:.35rem .6rem;border-radius:999px;font-size:.78rem}
+    .status{position:absolute;right:10px;top:10px;padding:.35rem .6rem;border-radius:999px;font-size:.78rem}
+    .status.ok{background:#0f271b;border:1px solid #1e6b42;color:#bbf7d0}
+    .status.sold{background:#2a1010;border:1px solid #5a1a1a;color:#fecaca}
+    .card .body{padding:12px 14px 16px;display:grid;gap:8px}
+    .price{font-weight:800;font-size:1.1rem}
+    .meta{display:flex;flex-wrap:wrap;gap:8px;color:#9fb0c9;font-size:.9rem}
+    .actions{margin-top:auto;display:flex;gap:8px;padding:0 14px 14px}
+    /* USP / About */
+    .usp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .usp{background:#0e1426;border:1px solid #1e2740;border-radius:14px;padding:16px;display:grid;gap:8px}
+    .usp p{color:#c7cfdb;margin:0}
+    /* Testimonials */
+    .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .testi{background:#0e1426;border:1px solid #1e2740;border-radius:14px;padding:16px}
+    .testi .name{font-weight:700}
+    /* CTA band */
+    .cta{background:linear-gradient(90deg,var(--brand) 0%, var(--brand-2) 100%);color:#051018;border-radius:16px;padding:22px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    /* Footer */
+    footer{border-top:1px solid #141a29;margin-top:24px}
+    .foot{display:grid;grid-template-columns:2fr 1fr 1fr 1fr; gap:16px;padding:28px 0}
+    .foot small{color:#98a6c4}
+    .foot a{color:#cfe3ff;opacity:.9}
+    .copyright{border-top:1px solid #141a29;padding:14px 0;color:#98a6c4}
+    /* Modal (quick view) */
+    dialog{border:none;border-radius:18px;max-width:min(860px,96vw);background:#0e1426;color:var(--text);padding:0;box-shadow:var(--shadow)}
+    dialog::backdrop{background:rgba(0,0,0,.6)}
+    .modal-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #1e2740}
+    .modal-body{display:grid;grid-template-columns:1.1fr .9fr;gap:12px;padding:12px}
+    .specs{display:grid;gap:8px;background:#0b1122;border:1px solid #1b2645;border-radius:12px;padding:12px}
+    .specs .row{display:flex;justify-content:space-between;color:#cfe3ff}
+    .close-x{cursor:pointer;border:1px solid #23304d;background:#0a1224;border-radius:10px;padding:.4rem .6rem}
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero-grid{grid-template-columns:1fr}
+      .filters{grid-template-columns:repeat(3,1fr)}
+      .catalog-grid{grid-template-columns:repeat(2,1fr)}
+      .usp-grid{grid-template-columns:repeat(2,1fr)}
+      .testi-grid{grid-template-columns:1fr 1fr}
+      .foot{grid-template-columns:1fr 1fr}
+      .nav-links{display:none}
+      .mobile-toggle{display:inline-flex}
+    }
+    @media (max-width: 640px){
+      .filters{grid-template-columns:1fr 1fr}
+      .catalog-grid{grid-template-columns:1fr}
+      .usp-grid,.testi-grid{grid-template-columns:1fr}
+      .foot{grid-template-columns:1fr}
+    }
+  
+
+
+/* Інтро */
+#intro {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #0b0d12; /* темний фон */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 2000;
+  opacity: 1;
+  transition: opacity 1s ease;
+  text-align: center;
+  color: #fff; /* білий текст */
+}
+
+.typing {
+  border-right: 3px solid #fff;
+  animation: blink-cursor 0.7s step-end infinite;
+  max-width: 90%;
+  font-size: clamp(1.2rem, 4vw, 2.5rem); /* адаптивний шрифт */
+  white-space: normal; /* дозволяємо перенос */
+  overflow: hidden;
+  word-wrap: break-word;
+  line-height: 1.3;
+}
+
+@keyframes blink-cursor {
+  50% { border-color: transparent; }
+}
+
+/* Градієнт для бренду */
+.gradient {
+  background: linear-gradient(90deg, var(--brand), var(--brand-2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+}
+
+
+
+</style>
+</head>
+<body>
+
+<!-- Інтро -->
+<div id="intro">
+  <div class="typing" id="text"></div>
+</div>
+
+<!-- Основний сайт -->
+<div id="main-content" style="opacity:0; transition: opacity 1s ease;">
+ 
+
+
+  <!-- Nav -->
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#top">
+        <div class="logo" aria-hidden="true">YB</div>
+        <div>
+          Y&B CARS
+          <small>Авто поруч із вами</small>
+        </div>
+      </a>
+      <nav class="nav-links" aria-label="Головна навігація">
+        <a href="#catalog">Каталог</a>
+        <a href="#finance">Фінансування</a>
+        <a href="#tradein">Трейд‑ін</a>
+        <a href="#about">Про нас</a>
+        <a href="#contacts">Контакти</a>
+      </nav>
+      <div class="nav-cta">
+        <button class="btn ghost mobile-toggle" id="menuBtn">Меню</button>
+        <a class="btn primary" href="#search">Підібрати авто</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero container" id="top">
+    <div class="hero-grid">
+      <div class="hero-card">
+        <h1>Продаж авто в <span style="background:linear-gradient(135deg,var(--brand),var(--brand-2));-webkit-background-clip:text;background-clip:text;color:transparent">Y&B CARS🚘</span></h1>
+        <p class="lead">У Y&B Cars ми робимо покупку авто легкою та приємною 😊. Від економічних моделей до преміальних автомобілів – у нас знайдеться саме те, що відповідає вашому стилю життя та потребам 🌟.
+
+Прозорі умови ✅, чесна консультація 🗣️ та підтримка на кожному кроці 🤝 – ми поруч, щоб ваша дорога починалася з упевненості.
+
+Вибирайте Y&B Cars – і ваш автомобіль стане справжнім джерелом радості та комфорту щодня 🚘💨.</p>
+        <div class="hero-stats">
+          <div class="chip">✔️ 150+ авто на складі</div>
+          <div class="chip">🛡️ 6 міс. гарантії</div>
+        </div>     
+  </section>
+      <!-- Соціальні кнопки -->
+<div class="social-buttons" style="margin: 20px 0; display: flex; justify-content: center; gap: 10px;">
+  <a href="https://instagram.com/yb_premium_auto" target="_blank" class="social-btn instagram">
+    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.32 3.608 1.295.975.975 1.233 2.242 1.295 3.608.058 1.266.07 1.645.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.32 2.633-1.295 3.608-.975.975-2.242 1.233-3.608 1.295-1.266.058-1.645.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.32-3.608-1.295-.975-.975-1.233-2.242-1.295-3.608C2.175 15.747 2.163 15.368 2.163 12s.012-3.584.07-4.85c.062-1.366.32-2.633 1.295-3.608.975-.975 2.242-1.233 3.608-1.295C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.012 7.052.07 5.771.128 4.667.412 3.708 1.371 2.749 2.33 2.465 3.434 2.407 4.715.012 5.995 0 6.404 0 12s.012 6.005.07 7.285c.058 1.281.342 2.385 1.301 3.344.959.959 2.063 1.243 3.344 1.301C8.332 23.988 8.741 24 12 24s3.668-.012 4.948-.07c1.281-.058 2.385-.342 3.344-1.301.959-.959 1.243-2.063 1.301-3.344C23.988 18.668 24 18.259 24 12s-.012-6.005-.07-7.285c-.058-1.281-.342-2.385-1.301-3.344-.959-.959-2.063-1.243-3.344-1.301C15.668.012 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a3.999 3.999 0 1 1 0-7.998 3.999 3.999 0 0 1 0 7.998zm6.406-11.845a1.44 1.44 0 1 0 0-2.88 1.44 1.44 0 0 0 0 2.88z"/>
+    </svg>
+    Instagram
+  </a>
+
+  <a href="https://tiktok.com/@cars_belgium_europe_" target="_blank" class="social-btn tiktok">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M12 0v8.667a3.333 3.333 0 1 0 3.334 3.333H18V0h-6zm-6.667 8.667a6.667 6.667 0 1 0 6.667 6.666V8.667H5.333z"/>
+    </svg>
+    TikTok
+  </a>
+</div>
+
+<style>
+.social-buttons {
+  flex-wrap: wrap; /* щоб кнопки не лізли за екран */
+}
+
+/* Загальний стиль кнопок */
+.social-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 0px rgba(0,0,0,0);
+  font-weight: 500;
+}
+
+/* Instagram */
+.social-btn.instagram {
+  background: #E1306C;
+}
+.social-btn.instagram:hover {
+  background: #C13584;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #E1306C;
+}
+
+/* TikTok */
+.social-btn.tiktok {
+  background: #25F4EE; /* світлий бірюзовий для контрасту */
+}
+.social-btn.tiktok:hover {
+  background: #1DA1F2;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #1DA1F2;
+}
+</style>
+
+  <!-- Catalog -->
+  <section class="section container" id="catalog" aria-label="Каталог авто">
+    <h2>Авто в наявності</h2>
+    <p class="sub">Оновлюємо щодня. Вказані реальні фото та характеристики.</p>
+    <div class="catalog-grid" id="cards">
+      <!-- Card template: use data-* для фільтрів -->
+ <article class="card" data-make="Volkswagen" data-model="Tiguan" data-body="Кросовер" data-fuel="Бензин" data-year="2024" data-mileage="8000" data-price="13800">
+  <div class="media slider">
+    <div class="slides">
+      <img src="auto1.jpg" alt="Volkswagen Tiguan фото 1" loading="lazy">
+      <img src="auto1-2.jpg" alt="Volkswagen Tiguan фото 2" loading="lazy">
+      <img src="auto1-3.jpg" alt="Volkswagen Tiguan фото 3" loading="lazy">
+    </div>
+    <button class="prev">&lt;</button>
+    <button class="next">&gt;</button>
+    <span class="pill">2024 • 8000 км</span>
+    <span class="status ok">В наявності</span>
+  </div>
+  <div class="body">
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+      <strong>Volkswagen Tiguan</strong>
+      <div class="price">€32500</div>
+    </div>
+    <div class="meta">Бензин • АКПП • 2.0 TFSI</div>
+  </div>
+  <div class="actions">
+    <button class="btn" data-quick>Швидкий перегляд</button>
+    <a class="btn primary" href="#contacts">Забронювати</a>
+  </div>
+</article>
+
+<article class="card" data-make="Mercedes" data-model="Benz CLS" data-body="Седан" data-fuel="Дизель" data-year="2019" data-mileage="190000" data-price="32200">
+  <div class="media slider">
+    <div class="slides">
+      <img src="auto2.jpg" alt="Mercedes Benz CLS фото 1" loading="lazy">
+      <img src="auto2-2.jpg" alt="Mercedes Benz CLS фото 2" loading="lazy">
+      <img src="auto2-3.jpg" alt="Mercedes Benz CLS фото 3" loading="lazy">
+    </div>
+    <button class="prev">&lt;</button>
+    <button class="next">&gt;</button>
+    <span class="pill">2019 • 190 тис. км</span>
+    <span class="status ok">В наявності</span>
+  </div>
+  <div class="body">
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+      <strong>Mercedes Benz CLS</strong>
+      <div class="price">€32 200</div>
+    </div>
+    <div class="meta">Дизель • АКПП • 3.0</div>
+  </div>
+  <div class="actions">
+    <button class="btn" data-quick>Швидкий перегляд</button>
+    <a class="btn primary" href="#contacts">Забронювати</a>
+  </div>
+</article>
+
+      <article class="card" data-make="Audi" data-model="A7" data-body="Sportback" data-fuel="Бензин" data-year="2019" data-mileage="180000" data-price="38000">
+  <div class="media slider">
+    <div class="slides">
+      <img src="auto3.jpg" alt="Audi A7 фото 1" loading="lazy">
+      <img src="auto3-1.jpg" alt="Audi A7 фото 2" loading="lazy">
+      <img src="auto3-2.jpg" alt="Audi A7 фото 3" loading="lazy">
+    </div>
+    <button class="prev">&lt;</button>
+    <button class="next">&gt;</button>
+    <span class="pill">2019 • 180 тис. км</span>
+    <span class="status ok">В наявності</span>
+  </div>
+  <div class="body">
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+      <strong>Audi A7</strong>
+      <div class="price">€38 000</div>
+    </div>
+    <div class="meta">Бензин • АКПП • 3.0</div>
+  </div>
+  <div class="actions">
+    <button class="btn" data-quick>Швидкий перегляд</button>
+    <a class="btn primary" href="#contacts">Забронювати</a>
+  </div>
+</article>
+
+<article class="card" data-make="Dodge" data-model="RAM1500" data-body="Пікап" data-fuel="Бензин" data-year="2021" data-mileage="138000" data-price="40000">
+  <div class="media slider">
+    <div class="slides">
+      <img src="auto4.jpg" alt="Dodge Ram1500 фото 1" loading="lazy">
+      <img src="auto4-1.jpg" alt="Dodge Ram1500 фото 2" loading="lazy">
+      <img src="auto4-2.jpg" alt="Dodge Ram1500 фото 3" loading="lazy">
+    </div>
+    <button class="prev">&lt;</button>
+    <button class="next">&gt;</button>
+    <span class="pill">2021 • 138 тис. км</span>
+    <span class="status ok">В наявності</span>
+  </div>
+  <div class="body">
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+      <strong>Dodge Ram1500</strong>
+      <div class="price">€40000</div>
+    </div>
+    <div class="meta">Бензин • АКПП • 5.7</div>
+  </div>
+  <div class="actions">
+    <button class="btn" data-quick>Швидкий перегляд</button>
+    <a class="btn primary" href="#contacts">Забронювати</a>
+  </div>
+</article>
+
+<article class="card" data-make="BMW" data-model="X6" data-body="Кросовер-купе" data-fuel="Дизель" data-year="2017" data-mileage="220000" data-price="22000">
+  <div class="media slider">
+    <div class="slides">
+      <img src="auto5.jpg" alt="BMW X6 фото 1" loading="lazy">
+      <img src="auto5-1.jpg" alt="BMW X6 фото 2" loading="lazy">
+      <img src="auto5-2.jpg" alt="BMW X6 фото 3" loading="lazy">
+    </div>
+    <button class="prev">&lt;</button>
+    <button class="next">&gt;</button>
+    <span class="pill">2017 • 220 тис. км</span>
+    <span class="status ok">В наявності</span>
+  </div>
+  <div class="body">
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+      <strong>BMW X6</strong>
+      <div class="price">€22 000</div>
+    </div>
+    <div class="meta">Дизель • АКПП • 3.0d</div>
+  </div>
+  <div class="actions">
+    <button class="btn" data-quick>Швидкий перегляд</button>
+    <a class="btn primary" href="#contacts">Забронювати</a>
+  </div>
+</article>
+
+<article class="card" data-make="Volvo" data-model="XC90" data-body="Кросовер" data-fuel="Бензин/Електро" data-year="2015" data-mileage="200000" data-price="21500">
+  <div class="media slider">
+    <div class="slides">
+      <img src="auto6.jpg" alt="Volvo XC90 фото 1" loading="lazy">
+      <img src="auto6-2.jpg" alt="Volvo XC90 фото 2" loading="lazy">
+      <img src="auto6-1.jpg" alt="Volvo XC90 фото 3" loading="lazy">
+    </div>
+    <button class="prev">&lt;</button>
+    <button class="next">&gt;</button>
+    <span class="pill">2015 • 200 тис. км</span>
+    <span class="status ok">В наявності</span>
+  </div>
+  <div class="body">
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+      <strong>Volvo XC90</strong>
+      <div class="price">€22 500</div>
+    </div>
+    <div class="meta">Бензин/Електро • АКПП • 2.0</div>
+  </div>
+  <div class="actions">
+    <button class="btn" data-quick>Швидкий перегляд</button>
+    <a class="btn primary" href="#contacts">Забронювати</a>
+  </div>
+</article>
+<style>
+.slider {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 300px;
+}
+.slides {
+  display: flex;
+  transition: transform 0.3s ease;
+}
+.slides img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.slider button.prev,
+.slider button.next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 18px;
+  z-index: 2;
+}
+.slider button.prev { left: 10px; }
+.slider button.next { right: 10px; }
+</style>
+
+<script>
+document.querySelectorAll('.slider').forEach(slider => {
+  const slides = slider.querySelector('.slides');
+  const imgs = slides.querySelectorAll('img');
+  const prevBtn = slider.querySelector('.prev');
+  const nextBtn = slider.querySelector('.next');
+  let index = 0;
+
+  function showSlide(i) {
+    if (i < 0) i = imgs.length - 1;
+    if (i >= imgs.length) i = 0;
+    index = i;
+    slides.style.transform = `translateX(-${index * 100}%)`;
+  }
+
+  prevBtn.addEventListener('click', () => showSlide(index - 1));
+  nextBtn.addEventListener('click', () => showSlide(index + 1));
+});
+</script>     
+
+  <!-- Finance / Trade-in / USP -->
+  <section class="section container" id="finance">
+    <div class="usp-grid">
+      <div class="usp">
+        <strong>Перевірка історії</strong>
+        <p>VIN‑звіт, сервісна історія, перевірка на ДТП та обмеження.</p>
+      </div>
+      <div class="usp">
+        <strong>Гарантія</strong>
+        <p>До 6 місяців на основні вузли та агрегати.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section container" aria-label="Відгуки клієнтів">
+    <h2>Нас радять друзі</h2>
+    <p class="sub">4.9/5 на основі 1200+ відгуків</p>
+    <div class="testi-grid">
+      <div class="testi">
+        <div>“Швидко підібрали авто під мій бюджет. Документи оформили за день.”</div>
+        <div class="name">Олег П.</div>
+      </div>
+      <div class="testi">
+        <div>“Чітка діагностика, прозорий стан. Приємно мати справу!”</div>
+        <div class="name">Марина К.</div>
+      </div>
+      <div class="testi">
+        <div>“Залишив своє авто по трейд‑ін — доплатив і забрав SUV мрії.”</div>
+        <div class="name">Сергій М.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA band -->
+  <section class="section container">
+    <div class="cta">
+      <div>
+        <strong style="font-size:1.2rem">Не знайшли потрібне авто?</strong>
+        <div>Залиште заявку — знайдемо за 48 годин у партнерській мережі.</div>
+      </div>
+      <a class="btn" href="#contacts">Залишити заявку</a>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="section container" id="about">
+    <h2>Про Y&B CARS</h2>
+    <p class="sub">У Y&B Cars працюють справжні експерти 🚗💡. Ми допомагаємо обрати авто, даємо чесні поради та забезпечуємо комфортну покупку ✅.
+
+Кожен клієнт для нас важливий, а ваша безпека і задоволення – наш пріоритет 🤝. З Y&B Cars ви завжди у надійних руках!</p>
+  </section>
+
+  <!-- Contacts -->
+  <section class="section container" id="contacts" aria-label="Контакти">
+  <h2>Контакти</h2>
+  <p class="sub">Приїжджайте на тест‑драйв або напишіть нам.</p>
+  <div class="usp-grid">
+    <div class="usp">
+      <strong>Antwerp, Belgium</strong>
+      <p>Пн‑Сб 09:00–19:00</p>
+    </div>
+    <div class="usp">
+      <strong>Телефон</strong>
+      <p><a href="tel:+380987531466">+380987531466</a></p>
+      <p>Viber/WhatsApp/Telegram</p>
+    </div>
+    <div class="usp">
+      <strong>Email</strong>
+      <p><a href="mailto:ybcars.auto@gmail.com">ybcars.auto@gmail.com</a></p>
+    </div>
+    <div class="usp">
+      <strong>Зв’язатися</strong>
+      <form id="contactForm" action="https://formspree.io/f/movnkvae" method="POST">
+        <div style="display:grid; gap:8px">
+          <input required name="name" placeholder="Ім’я" style="padding:.7rem .8rem; border-radius:10px; border:1px solid #23304d; background:#0a1224; color:#e6ecfa;">
+          <input required type="email" name="email" placeholder="Email" style="padding:.7rem .8rem; border-radius:10px; border:1px solid #23304d; background:#0a1224; color:#e6ecfa;">
+          <input name="phone" placeholder="Телефон" style="padding:.7rem .8rem; border-radius:10px; border:1px solid #23304d; background:#0a1224; color:#e6ecfa;">
+          <textarea name="msg" rows="3" placeholder="Повідомлення" style="resize:vertical; border-radius:10px; border:1px solid #23304d; background:#0a1224; color:#e6ecfa; padding:.7rem .8rem;"></textarea>
+          <button class="btn primary" type="submit" style="padding:.7rem; border:none; border-radius:10px; background:#1a73e8; color:white; cursor:pointer;">Надіслати</button>
+          <small style="color:#9fb0c9">Натискаючи “Надіслати”, ви погоджуєтесь із політикою конфіденційності.</small>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Спливаюче повідомлення -->
+  <div id="successMessage" style="display:none; background:#4BB543; color:white; padding:10px 15px; border-radius:10px; margin-top:10px; position:fixed; top:20px; right:20px; box-shadow:0 4px 6px rgba(0,0,0,0.2); z-index:1000;">
+    Дякуємо! Ваше повідомлення надіслано.
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('contactForm');
+  const successMessage = document.getElementById('successMessage');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+      method: form.method,
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    }).then(response => {
+      if (response.ok) {
+        successMessage.style.display = 'block';
+        form.reset();
+        setTimeout(() => { successMessage.style.display = 'none'; }, 5000);
+      } else {
+        response.json().then(data => {
+          alert(data.error || "Сталася помилка при відправці форми.");
+        });
+      }
+    }).catch(() => {
+      alert("Сталася помилка при відправці форми.");
+    });
+  });
+</script>
+
+  <footer>
+    <div class="container foot">
+      <div>
+        <div class="brand"><div class="logo">YB</div> Y&B CARS</div>
+        <p style="color:#c7cfdb">Продаж і підбір авто. Легко. Прозоро. Швидко.</p>
+      </div>
+      <div>
+        <strong>Компанія</strong><br>
+        <a href="#about">Про нас</a><br>
+        <a href="#finance">Послуги</a><br>
+        <a href="#contacts">Контакти</a>
+      </div>
+      </div>
+        <strong>Правове</strong><br>
+        <a href="#">Політика конфіденційності</a><br>
+        <a href="#">Умови користування</a>
+      </div>
+    </div>
+    <div class="container copyright">
+      © <span id="year"></span> Y&B CARS. Усі права захищено.
+    </div>
+  </footer>
+
+  <!-- Quick View Modal -->
+  <dialog id="quickModal" aria-label="Швидкий перегляд авто">
+    <div class="modal-head">
+      <strong id="qmTitle">Авто</strong>
+      <button class="close-x" id="qmClose">Закрити ✕</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <img id="qmImg" src="" alt="" style="width:100%;border-radius:12px">
+      </div>
+      <div>
+        <div class="specs" id="qmSpecs"></div>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <a class="btn primary" href="#contacts">Записатись на перегляд</a>
+          <a class="btn" href="#contacts">Поставити запитання</a>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    // Year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Mobile "Меню" scroll to search
+    document.getElementById('menuBtn')?.addEventListener('click', () => {
+      document.querySelector('.nav-links')?.classList.toggle('show');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Filtering & sorting
+    const form = document.getElementById('filterForm');
+    const resetBtn = document.getElementById('resetBtn');
+    const cardsWrap = document.getElementById('cards');
+
+    function normalize(str){ return (str||'').toString().trim().toLowerCase(); }
+
+    function applyFilters(e){
+      if(e) e.preventDefault();
+      const make = document.getElementById('make').value;
+      const model = normalize(document.getElementById('model').value);
+      const body = document.getElementById('body').value;
+      const fuel = document.getElementById('fuel').value;
+      const yf = parseInt(document.getElementById('yearFrom').value||0,10);
+      const yt = parseInt(document.getElementById('yearTo').value||9999,10);
+      const priceTo = parseInt(document.getElementById('priceTo').value||Infinity,10);
+      const sort = document.getElementById('sort').value;
+
+      const cards = Array.from(cardsWrap.children);
+
+      // Filter pass
+      cards.forEach(card=>{
+        const c = card.dataset;
+        const pass =
+          (!make || c.make === make) &&
+          (!model || normalize(c.model).includes(model)) &&
+          (!body || c.body === body) &&
+          (!fuel || c.fuel === fuel) &&
+          (parseInt(c.year,10) >= yf) &&
+          (parseInt(c.year,10) <= yt) &&
+          (parseInt(c.price,10) <= priceTo);
+        card.style.display = pass ? '' : 'none';
+      });
+
+      // Sorting (only visible)
+      const visible = cards.filter(c => c.style.display !== 'none');
+      const compare = {
+        'price-asc':  (a,b)=> +a.dataset.price - +b.dataset.price,
+        'price-desc': (a,b)=> +b.dataset.price - +a.dataset.price,
+        'year-desc':  (a,b)=> +b.dataset.year - +a.dataset.year,
+        'mileage-asc':(a,b)=> +a.dataset.mileage - +b.dataset.mileage,
+      }[sort];
+
+      if(compare){
+        visible.sort(compare).forEach(n=>cardsWrap.appendChild(n));
+      }
+    }
+
+    form.addEventListener('submit', applyFilters);
+    resetBtn.addEventListener('click', ()=>{
+      form.reset();
+      applyFilters();
+    });
+
+    // Quick view modal
+    const modal = document.getElementById('quickModal');
+    const qmClose = document.getElementById('qmClose');
+    document.querySelectorAll('[data-quick]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const card = btn.closest('.card');
+        const title = `${card.dataset.make} ${card.dataset.model}`;
+        const img = card.querySelector('img').src;
+        const specs = `
+          <div class="row"><span>Марка/Модель</span><strong>${card.dataset.make} ${card.dataset.model}</strong></div>
+          <div class="row"><span>Кузов</span><strong>${card.dataset.body}</strong></div>
+          <div class="row"><span>Паливо</span><strong>${card.dataset.fuel}</strong></div>
+          <div class="row"><span>Рік</span><strong>${card.dataset.year}</strong></div>
+          <div class="row"><span>Пробіг</span><strong>${Number(card.dataset.mileage).toLocaleString('uk-UA')} км</strong></div>
+          <div class="row"><span>Ціна</span><strong>$${Number(card.dataset.price).toLocaleString('uk-UA')}</strong></div>
+        `;
+        document.getElementById('qmTitle').textContent = title;
+        document.getElementById('qmImg').src = img;
+        document.getElementById('qmImg').alt = title;
+        document.getElementById('qmSpecs').innerHTML = specs;
+        modal.showModal();
+      });
+    });
+    qmClose.addEventListener('click', ()=>modal.close());
+    modal.addEventListener('click', e=>{ if(e.target === modal) modal.close(); });
+
+    // Minimal “submit” mock for contact form
+    document.getElementById('contactForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      alert('Дякуємо! Ми зв’яжемось із вами протягом робочого дня.');
+      e.target.reset();
+    });
+  </script>
+</div>
+
+<script>
+// Інтро-анімація
+const fullText = "Y&B CARS – твій надійний автодруг 🚘";
+const textElement = document.getElementById("text");
+let index = 0;
+
+function type() {
+  if (index < fullText.length) {
+    let char = fullText.charAt(index);
+    if (index < 7) {
+      textElement.innerHTML += `<span class="gradient">${char}</span>`;
+    } else {
+      textElement.innerHTML += char;
+    }
+    index++;
+    setTimeout(type, 120);
+  } else {
+    setTimeout(showMainContent, 800);
+  }
+}
+
+function showMainContent() {
+  const intro = document.getElementById("intro");
+  intro.style.opacity = 0;
+  setTimeout(() => {
+    intro.style.display = "none";
+    const main = document.getElementById("main-content");
+    main.style.opacity = 1;
+  }, 1000);
+}
+
+window.onload = type;
+</script>
+
+</body>
+</html
