@@ -1,0 +1,1078 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title data-i18n="title">Y&B CARS — Продаж авто з пробігом та нових</title>
+  <meta name="description" content="Y&B CARS — купівля та продаж авто. Перевірені автомобілі, фінансування, трейд-ін, гарантія.">
+  <meta property="og:title" content="Y&B CARS — Продаж авто" />
+  <meta property="og:description" content="Перевірені авто, чесна історія, зручний підбір." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://picsum.photos/1200/630?auto=compress" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='100%25' height='100%25' fill='%23000'/%3E%3Ctext x='50%25' y='54%25' font-size='34' text-anchor='middle' fill='white' font-family='Arial,Helvetica,sans-serif'%3EYB%3C/text%3E%3C/svg%3E">
+  <style>
+    :root{
+      --bg:#0b0d12;
+      --card:#11141b;
+      --muted:#6f7b91;
+      --brand:#2dd4bf; /* бірюзовий акцент */
+      --brand-2:#60a5fa; /* синій акцент */
+      --text:#e6e9ef;
+      --ok:#22c55e;
+      --danger:#ef4444;
+      --radius:14px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+html, body {
+  margin: 0;
+  height: 100%;
+  background: 
+    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+    url("ybcars.jpg") no-repeat center center fixed;
+  background-size: cover;
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+  opacity: 0;
+  animation: fadeIn 1.5s ease-in-out forwards,
+             parallaxMove 30s linear infinite;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes parallaxMove { from { background-position: center 0; } to { background-position: center 100%; } }
+
+    a{color:inherit;text-decoration:none}
+    img{display:block;max-width:100%;height:auto}
+    .container{width:min(1160px, 92vw);margin-inline:auto}
+    .topbar{font-size:.9rem;color:#c7cfdb;border-bottom:1px solid #1a2131;background:#0b0d12}
+    .topbar .container{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:.6rem 0}
+    .badge{display:inline-flex;align-items:center;gap:.5rem;background:#0e1526;border:1px solid #1f2a44;padding:.35rem .6rem;border-radius:999px}
+    header.nav{position:sticky;top:0;z-index:50;background:#0b0d12e6;backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid #141a29}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0; gap:12px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.4px}
+    .logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;color:#00131a;font-weight:900}
+    .brand small{display:block;font-weight:500;color:var(--muted);letter-spacing:.2px}
+    .nav-links{display:flex;gap:22px;align-items:center}
+    .nav-links a{opacity:.9}
+    .nav-cta{display:flex;gap:10px;align-items:center}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;border:1px solid #1b2436;background:#0f1627;padding:.75rem 1rem;border-radius:12px;color:#eaf2ff;cursor:pointer;transition:.2s box-shadow,.2s transform,.2s border-color}
+    .btn:hover{box-shadow:var(--shadow);transform:translateY(-1px);border-color:#24304c}
+    .btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#051018;border:none}
+    .btn.ghost{background:transparent}
+    .mobile-toggle{display:none}
+    /* Hero */
+    .hero{padding:42px 0 24px;display:grid;gap:26px}
+    .hero-grid{display:grid;grid-template-columns: 1.15fr .85fr; gap:26px}
+    .hero-card{background:radial-gradient(1200px 400px at -15% -20%, #1a2540 0%, transparent 45%), #0f1320;border:1px solid #1a2240;border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .hero h1{font-size:clamp(28px, 3.4vw, 44px); line-height:1.05;margin:0 0 10px}
+    .hero p.lead{margin:0 0 18px;color:#c3ccda;max-width:60ch}
+    .hero-stats{display:flex;gap:20px;flex-wrap:wrap;margin-top:10px}
+    .chip{background:#10192e;border:1px solid #1f2a44;color:#cfe3ff;padding:.5rem .7rem;border-radius:999px;font-size:.9rem}
+    .search-card{background:#0e1426;border:1px solid #1e2740;border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+    .filters{display:grid;grid-template-columns:repeat(6,1fr); gap:10px}
+    .filters .field{display:flex;flex-direction:column;gap:6px}
+    label{font-size:.82rem;color:#a9b6cb}
+    select,input{width:100%;padding:.7rem .8rem;border-radius:10px;border:1px solid #23304d;background:#0a1224;color:#e6ecfa}
+    .filters .full{grid-column:1/-1}
+    .filters .half{grid-column: span 3}
+    .filters .third{grid-column: span 2}
+    /* Catalog */
+    .section{padding:34px 0}
+    .section h2{font-size:clamp(22px,2.5vw,32px);margin:0 0 6px}
+    .section p.sub{color:#c7cfdb;margin:0 0 18px}
+    .catalog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{background:linear-gradient(180deg,#0d1220,#0b0f1c);border:1px solid #1a2240;border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+    .card .media{position:relative;aspect-ratio:16/10;overflow:hidden}
+    .card .media img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease}
+    .card:hover .media img{transform:scale(1.06)}
+    .pill{position:absolute;left:10px;top:10px;background:#0f182c;border:1px solid #213055;color:#cfe3ff;padding:.35rem .6rem;border-radius:999px;font-size:.78rem}
+    .status{position:absolute;right:10px;top:10px;padding:.35rem .6rem;border-radius:999px;font-size:.78rem}
+    .status.ok{background:#0f271b;border:1px solid #1e6b42;color:#bbf7d0}
+    .status.sold{background:#2a1010;border:1px solid #5a1a1a;color:#fecaca}
+    .card .body{padding:12px 14px 16px;display:grid;gap:8px}
+    .price{font-weight:800;font-size:1.1rem}
+    .meta{display:flex;flex-wrap:wrap;gap:8px;color:#9fb0c9;font-size:.9rem}
+    .actions{margin-top:auto;display:flex;gap:8px;padding:0 14px 14px}
+    /* USP / About */
+    .usp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .usp{background:#0e1426;border:1px solid #1e2740;border-radius:14px;padding:16px;display:grid;gap:8px}
+    .usp p{color:#c7cfdb;margin:0}
+    /* Testimonials */
+    .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .testi{background:#0e1426;border:1px solid #1e2740;border-radius:14px;padding:16px}
+    .testi .name{font-weight:700}
+    /* CTA band */
+    .cta{background:linear-gradient(90deg,var(--brand) 0%, var(--brand-2) 100%);color:#051018;border-radius:16px;padding:22px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    /* Footer */
+    footer{border-top:1px solid #141a29;margin-top:24px}
+    .foot{display:grid;grid-template-columns:2fr 1fr 1fr 1fr; gap:16px;padding:28px 0}
+    .foot small{color:#98a6c4}
+    .foot a{color:#cfe3ff;opacity:.9}
+    .copyright{border-top:1px solid #141a29;padding:14px 0;color:#98a6c4}
+    /* Modal (quick view) */
+    dialog{border:none;border-radius:18px;max-width:min(860px,96vw);background:#0e1426;color:var(--text);padding:0;box-shadow:var(--shadow)}
+    dialog::backdrop{background:rgba(0,0,0,.6)}
+    .modal-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #1e2740}
+    .modal-body{display:grid;grid-template-columns:1.1fr .9fr;gap:12px;padding:12px}
+    .specs{display:grid;gap:8px;background:#0b1122;border:1px solid #1b2645;border-radius:12px;padding:12px}
+    .specs .row{display:flex;justify-content:space-between;color:#cfe3ff}
+    .close-x{cursor:pointer;border:1px solid #23304d;background:#0a1224;border-radius:10px;padding:.4rem .6rem}
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero-grid{grid-template-columns:1fr}
+      .filters{grid-template-columns:repeat(3,1fr)}
+      .catalog-grid{grid-template-columns:repeat(2,1fr)}
+      .usp-grid{grid-template-columns:repeat(2,1fr)}
+      .testi-grid{grid-template-columns:1fr 1fr}
+      .foot{grid-template-columns:1fr 1fr}
+      .nav-links{display:none}
+      .mobile-toggle{display:inline-flex}
+    }
+    @media (max-width: 640px){
+      .filters{grid-template-columns:1fr 1fr}
+      .catalog-grid{grid-template-columns:1fr}
+      .usp-grid,.testi-grid{grid-template-columns:1fr}
+      .foot{grid-template-columns:1fr}
+    }
+
+#intro {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #0b0d12;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 2000;
+  opacity: 1;
+  transition: opacity 1s ease;
+  text-align: center;
+  color: #fff;
+}
+
+.typing {
+  border-right: 3px solid #fff;
+  animation: blink-cursor 0.7s step-end infinite;
+  max-width: 90%;
+  font-size: clamp(1.2rem, 4vw, 2.5rem);
+  white-space: normal;
+  overflow: hidden;
+  word-wrap: break-word;
+  line-height: 1.3;
+}
+
+@keyframes blink-cursor { 50% { border-color: transparent; } }
+
+.gradient {
+  background: linear-gradient(90deg, var(--brand), var(--brand-2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+}
+
+/* Popup styles (language chooser) */
+#langPopup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.popup-content {
+  background: #0e1426;
+  border: 1px solid #1e2740;
+  border-radius: 16px;
+  padding: 24px 20px;
+  text-align: center;
+  color: #e6ecfa;
+  box-shadow: 0 0 30px rgba(0,0,0,0.6);
+  max-width: 420px;
+  width: 92%;
+}
+.lang-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+.lang-btn {
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  color: #051018;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.3s;
+}
+.lang-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(45, 212, 191, 0.35);
+}
+
+/* small helper for inline small text */
+.small-muted { color: var(--muted); font-size: .9rem; }
+  
+/* Логотип у вступі */
+.intro-logo {
+  position: absolute;
+  max-width: 40%;
+  opacity: 0;
+  animation: fadeInLogo 2s ease forwards;
+  animation-delay: 0.8s; /* з’явиться трохи після старту */
+}
+
+/* Анімація появи */
+@keyframes fadeInLogo {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+  </style>
+</head>
+<body>
+
+<!-- Інтро -->
+<div id="intro">
+  <!-- Логотип -->
+  <img src="ybcars.jpg" alt="Y&B Cars Logo" class="intro-logo">
+
+  <!-- Текст -->
+  <div class="typing" id="text" data-i18n="intro_text"></div>
+</div>
+
+<div id="main-content" style="opacity:0; transition: opacity 1s ease;">
+  <!-- Nav -->
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#top">
+        <div class="logo" aria-hidden="true">YB</div>
+        <div>
+          <div data-i18n="brand_title">Y&B CARS</div>
+          <small data-i18n="brand_tag">Авто поруч із вами</small>
+        </div>
+      </a>
+      <nav class="nav-links" aria-label="Головна навігація">
+        <a href="#catalog" data-i18n="nav_catalog">Каталог</a>
+        <a href="#finance" data-i18n="nav_finance">Фінансування</a>
+        <a href="#tradein" data-i18n="nav_tradein">Трейд-ін</a>
+        <a href="#about" data-i18n="nav_about">Про нас</a>
+        <a href="#contacts" data-i18n="nav_contacts">Контакти</a>
+      </nav>
+      <div class="nav-cta">
+        <!-- language select will be used after popup; keep an accessible small one too -->
+        <div class="lang-switch" style="display:none;">
+          <select id="langSelect">
+            <option value="uk">🇺🇦 Українська</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="nl">🇳🇱 Nederlands</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero container" id="top">
+    <div class="hero-grid">
+      <div class="hero-card">
+        <h1><span data-i18n="hero_prefix">Продаж авто в</span> <span style="background:linear-gradient(135deg,var(--brand),var(--brand-2));-webkit-background-clip:text;background-clip:text;color:transparent">Y&B CARS🚘</span></h1>
+        <p class="lead" data-i18n="hero_lead">У Y&B Cars ми робимо покупку авто легкою та приємною 😊. Від економічних моделей до преміальних автомобілів – у нас знайдеться саме те, що відповідає вашому стилю життя та потребам 🌟.
+
+Прозорі умови ✅, чесна консультація 🗣️ та підтримка на кожному кроці 🤝 – ми поруч, щоб ваша дорога починалася з упевненості.
+
+Вибирайте Y&B Cars – і ваш автомобіль стане справжнім джерелом радості та комфорту щодня 🚘💨.</p>
+        <div class="hero-stats">
+          <div class="chip" data-i18n="stat_stock">✔️ 150+ авто на складі</div>
+          <div class="chip" data-i18n="stat_warranty">🛡️ 6 міс. гарантії</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Соціальні кнопки -->
+<div class="social-buttons" style="margin: 20px 0; display: flex; justify-content: center; gap: 10px;">
+  <a href="https://instagram.com/yb_premium_auto" target="_blank" class="social-btn instagram">
+    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.32 3.608 1.295.975.975 1.233 2.242 1.295 3.608.058 1.266.07 1.645.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.32 2.633-1.295 3.608-.975.975-2.242 1.233-3.608 1.295-1.266.058-1.645.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.32-3.608-1.295-.975-.975-1.233-2.242-1.295-3.608C2.175 15.747 2.163 15.368 2.163 12s.012-3.584.07-4.85c.062-1.366.32-2.633 1.295-3.608.975-.975 2.242-1.233 3.608-1.295C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.012 7.052.07 5.771.128 4.667.412 3.708 1.371 2.749 2.33 2.465 3.434 2.407 4.715.012 5.995 0 6.404 0 12s.012 6.005.07 7.285c.058 1.281.342 2.385 1.301 3.344.959.959 2.063 1.243 3.344 1.301C8.332 23.988 8.741 24 12 24s3.668-.012 4.948-.07c1.281-.058 2.385-.342 3.344-1.301.959-.959 1.243-2.063 1.301-3.344C23.988 18.668 24 18.259 24 12s-.012-6.005-.07-7.285c-.058-1.281-.342-2.385-1.301-3.344-.959-.959-2.063-1.243-3.344-1.301C15.668.012 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a3.999 3.999 0 1 1 0-7.998 3.999 3.999 0 0 1 0 7.998zm6.406-11.845a1.44 1.44 0 1 0 0-2.88 1.44 1.44 0 0 0 0 2.88z"/>
+    </svg>
+    Instagram
+  </a>
+
+  <a href="https://tiktok.com/@cars_belgium_europe_" target="_blank" class="social-btn tiktok">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M12 0v8.667a3.333 3.333 0 1 0 3.334 3.333H18V0h-6zm-6.667 8.667a6.667 6.667 0 1 0 6.667 6.666V8.667H5.333z"/>
+    </svg>
+    TikTok
+  </a>
+</div>
+
+<style>
+.social-buttons { flex-wrap: wrap; }
+.social-btn { display: flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; color: white; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 0 0px rgba(0,0,0,0); font-weight: 500; }
+.social-btn.instagram { background: #E1306C; }
+.social-btn.instagram:hover { background: #C13584; transform: scale(1.05); box-shadow: 0 0 15px #E1306C; }
+.social-btn.tiktok { background: #25F4EE; }
+.social-btn.tiktok:hover { background: #1DA1F2; transform: scale(1.05); box-shadow: 0 0 15px #1DA1F2; }
+
+/* Логотип у вступі */
+.intro-logo {
+  position: absolute;
+  max-width: 40%;
+  opacity: 0;
+  animation: fadeInLogo 2s ease forwards;
+  animation-delay: 0.8s; /* з’явиться трохи після старту */
+}
+
+/* Анімація появи */
+@keyframes fadeInLogo {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+  </style>
+
+  <!-- Catalog -->
+  <section class="section container" id="catalog" aria-label="Каталог авто">
+    <h2 data-i18n="catalog_title">Авто в наявності</h2>
+    <p class="sub" data-i18n="catalog_sub">Оновлюємо щодня. Вказані реальні фото та характеристики.</p>
+    <div class="catalog-grid" id="cards">
+      <!-- Card template: use data-* для фільтрів -->
+ <article class="card" data-make="BMW" data-model="M3" data-year="2002" data-mileage="105000" data-price="30000">
+  <div class="media slider">
+    <div class="slides">
+      <img src="auto1.jpg" alt="Volkswagen Tiguan фото 1" loading="lazy">
+      <img src="auto1-2.jpg" alt="Volkswagen Tiguan фото 2" loading="lazy">
+      <img src="auto1-3.jpg" alt="Volkswagen Tiguan фото 3" loading="lazy">
+    </div>
+    <button class="prev">&lt;</button>
+    <button class="next">&gt;</button>
+    <span class="pill">2002 • 105000 км</span>
+    <span class="status ok" data-i18n="status_available">В наявності</span>
+  </div>
+  <div class="body">
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+      <strong>BMW M3</strong>
+      <div class="price">€30000</div>
+    </div>
+    <div class="meta">Бензин • МКПП • 3.2</div>
+  </div>
+  <div class="actions">
+    <button class="btn" data-quick data-i18n="btn_quick">Швидкий перегляд</button>
+    <a class="btn primary" href="#contacts" data-i18n="btn_reserve">Забронювати</a>
+  </div>
+</article>
+
+<article class="card" data-make="Mercedes" data-model="Benz CLS" data-body="Седан" data-fuel="Дизель" data-year="2019" data-mileage="190000" data-price="32200">
+  <div class="media slider">
+    <div class="slides">
+      <img src="auto2.jpg" alt="Mercedes Benz CLS фото 1" loading="lazy">
+      <img src="auto2-2.jpg" alt="Mercedes Benz CLS фото 2" loading="lazy">
+      <img src="auto2-3.jpg" alt="Mercedes Benz CLS фото 3" loading="lazy">
+    </div>
+    <button class="prev">&lt;</button>
+    <button class="next">&gt;</button>
+    <span class="pill">2019 • 190 тис. км</span>
+    <span class="status ok" data-i18n="status_available">В наявності</span>
+  </div>
+  <div class="body">
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+      <strong>Mercedes Benz CLS</strong>
+      <div class="price">€32 200</div>
+    </div>
+    <div class="meta">Дизель • АКПП • 3.0</div>
+  </div>
+  <div class="actions">
+    <button class="btn" data-quick data-i18n="btn_quick">Швидкий перегляд</button>
+    <a class="btn primary" href="#contacts" data-i18n="btn_reserve">Забронювати</a>
+  </div>
+</article>
+
+      <article class="card" data-make="Ford" data-model="F150 XLT" data-body="Кросовер" data-fuel="Бензин" data-year="2023" data-mileage="40000" data-price="47000">
+  <div class="media slider">
+    <div class="slides">
+      <img src="auto3.jpg" alt="Audi A7 фото 1" loading="lazy">
+      <img src="auto3-1.jpg" alt="Audi A7 фото 2" loading="lazy">
+      <img src="auto3-2.jpg" alt="Audi A7 фото 3" loading="lazy">
+    </div>
+    <button class="prev">&lt;</button>
+    <button class="next">&gt;</button>
+    <span class="pill">2023 • 40 тис. км</span>
+    <span class="status ok" data-i18n="status_available">В наявності</span>
+  </div>
+  <div class="body">
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+      <strong>Ford F150 XLT</strong>
+      <div class="price">€47 000</div>
+    </div>
+    <div class="meta">Бензин • АКПП • 5.0</div>
+  </div>
+  <div class="actions">
+    <button class="btn" data-quick data-i18n="btn_quick">Швидкий перегляд</button>
+    <a class="btn primary" href="#contacts" data-i18n="btn_reserve">Забронювати</a>
+  </div>
+</article>
+
+<article class="card" data-make="Dodge" data-model="RAM1500" data-body="Пікап" data-fuel="Бензин" data-year="2021" data-mileage="138000" data-price="40000">
+  <div class="media slider">
+    <div class="slides">
+      <img src="auto4.jpg" alt="Dodge Ram1500 фото 1" loading="lazy">
+      <img src="auto4-1.jpg" alt="Dodge Ram1500 фото 2" loading="lazy">
+      <img src="auto4-2.jpg" alt="Dodge Ram1500 фото 3" loading="lazy">
+    </div>
+    <button class="prev">&lt;</button>
+    <button class="next">&gt;</button>
+    <span class="pill">2021 • 138 тис. км</span>
+    <span class="status ok" data-i18n="status_available">В наявності</span>
+  </div>
+  <div class="body">
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+      <strong>Dodge Ram1500</strong>
+      <div class="price">€40000</div>
+    </div>
+    <div class="meta">Бензин • АКПП • 5.7</div>
+  </div>
+  <div class="actions">
+    <button class="btn" data-quick data-i18n="btn_quick">Швидкий перегляд</button>
+    <a class="btn primary" href="#contacts" data-i18n="btn_reserve">Забронювати</a>
+  </div>
+</article>
+
+<article class="card" data-make="BMW" data-model="X6" data-body="Кросовер-купе" data-fuel="Дизель" data-year="2017" data-mileage="220000" data-price="22000">
+  <div class="media slider">
+    <div class="slides">
+      <img src="auto5.jpg" alt="BMW X6 фото 1" loading="lazy">
+      <img src="auto5-1.jpg" alt="BMW X6 фото 2" loading="lazy">
+      <img src="auto5-2.jpg" alt="BMW X6 фото 3" loading="lazy">
+    </div>
+    <button class="prev">&lt;</button>
+    <button class="next">&gt;</button>
+    <span class="pill">2017 • 220 тис. км</span>
+    <span class="status ok" data-i18n="status_available">В наявності</span>
+  </div>
+  <div class="body">
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+      <strong>BMW X6</strong>
+      <div class="price">€22 000</div>
+    </div>
+    <div class="meta">Дизель • АКПП • 3.0d</div>
+  </div>
+  <div class="actions">
+    <button class="btn" data-quick data-i18n="btn_quick">Швидкий перегляд</button>
+    <a class="btn primary" href="#contacts" data-i18n="btn_reserve">Забронювати</a>
+  </div>
+</article>
+
+<article class="card" data-make="Volvo" data-model="XC90" data-body="Кросовер" data-fuel="Бензин/Електро" data-year="2015" data-mileage="200000" data-price="21500">
+  <div class="media slider">
+    <div class="slides">
+      <img src="auto6.jpg" alt="Volvo XC90 фото 1" loading="lazy">
+      <img src="auto6-2.jpg" alt="Volvo XC90 фото 2" loading="lazy">
+      <img src="auto6-1.jpg" alt="Volvo XC90 фото 3" loading="lazy">
+    </div>
+    <button class="prev">&lt;</button>
+    <button class="next">&gt;</button>
+    <span class="pill">2015 • 200 тис. км</span>
+    <span class="status ok" data-i18n="status_available">В наявності</span>
+  </div>
+  <div class="body">
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+      <strong>Volvo XC90</strong>
+      <div class="price">€22 500</div>
+    </div>
+    <div class="meta">Бензин/Електро • АКПП • 2.0</div>
+  </div>
+  <div class="actions">
+    <button class="btn" data-quick data-i18n="btn_quick">Швидкий перегляд</button>
+    <a class="btn primary" href="#contacts" data-i18n="btn_reserve">Забронювати</a>
+  </div>
+</article>
+
+<style>
+.slider {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 300px;
+}
+.slides {
+  display: flex;
+  transition: transform 0.3s ease;
+}
+.slides img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.slider button.prev,
+.slider button.next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 18px;
+  z-index: 2;
+}
+.slider button.prev { left: 10px; }
+.slider button.next { right: 10px; }
+
+/* Логотип у вступі */
+.intro-logo {
+  position: absolute;
+  max-width: 40%;
+  opacity: 0;
+  animation: fadeInLogo 2s ease forwards;
+  animation-delay: 0.8s; /* з’явиться трохи після старту */
+}
+
+/* Анімація появи */
+@keyframes fadeInLogo {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+  </style>
+
+<script>
+document.querySelectorAll('.slider').forEach(slider => {
+  const slides = slider.querySelector('.slides');
+  const imgs = slides.querySelectorAll('img');
+  const prevBtn = slider.querySelector('.prev');
+  const nextBtn = slider.querySelector('.next');
+  let index = 0;
+  function showSlide(i) {
+    if (i < 0) i = imgs.length - 1;
+    if (i >= imgs.length) i = 0;
+    index = i;
+    slides.style.transform = `translateX(-${index * 100}%)`;
+  }
+  prevBtn?.addEventListener('click', () => showSlide(index - 1));
+  nextBtn?.addEventListener('click', () => showSlide(index + 1));
+});
+</script>     
+
+  <!-- Finance / Trade-in / USP -->
+  <section class="section container" id="finance">
+    <div class="usp-grid">
+      <div class="usp">
+        <strong data-i18n="usp_history">Перевірка історії</strong>
+        <p data-i18n="usp_history_text">VIN-звіт, сервісна історія, перевірка на ДТП та обмеження.</p>
+      </div>
+      <div class="usp">
+        <strong data-i18n="usp_warranty">Гарантія</strong>
+        <p data-i18n="usp_warranty_text">До 6 місяців на основні вузли та агрегати.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section container" aria-label="Відгуки клієнтів">
+    <h2 data-i18n="testi_title">Нас радять друзі</h2>
+    <p class="sub" data-i18n="testi_sub">4.9/5 на основі 1200+ відгуків</p>
+    <div class="testi-grid">
+      <div class="testi">
+        <div data-i18n="testi1">“Швидко підібрали авто під мій бюджет. Документи оформили за день.”</div>
+        <div class="name">Олег П.</div>
+      </div>
+      <div class="testi">
+        <div data-i18n="testi2">“Чітка діагностика, прозорий стан. Приємно мати справу!”</div>
+        <div class="name">Марина К.</div>
+      </div>
+      <div class="testi">
+        <div data-i18n="testi3">“Залишив своє авто по трейд-ін — доплатив і забрав SUV мрії.”</div>
+        <div class="name">Сергій М.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA band -->
+  <section class="section container">
+    <div class="cta">
+      <div>
+        <strong style="font-size:1.2rem" data-i18n="cta_title">Не знайшли потрібне авто?</strong>
+        <div data-i18n="cta_text">Залиште заявку — знайдемо за 48 годин у партнерській мережі.</div>
+      </div>
+      <a class="btn" href="#contacts" data-i18n="cta_btn">Залишити заявку</a>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="section container" id="about">
+    <h2 data-i18n="about_title">Про Y&B CARS</h2>
+    <p class="sub" data-i18n="about_sub">У Y&B Cars працюють справжні експерти 🚗💡. Ми допомагаємо обрати авто, даємо чесні поради та забезпечуємо комфортну покупку ✅.
+
+Кожен клієнт для нас важливий, а ваша безпека і задоволення – наш пріоритет 🤝. З Y&B Cars ви завжди у надійних руках!</p>
+  </section>
+
+  <!-- Contacts -->
+  <section class="section container" id="contacts" aria-label="Контакти">
+  <h2 data-i18n="contacts_title">Контакти</h2>
+  <p class="sub" data-i18n="contacts_sub">Приїжджайте на тест-драйв або напишіть нам.</p>
+  <div class="usp-grid">
+    <div class="usp">
+      <strong data-i18n="office_loc">Antwerp, Belgium</strong>
+      <p data-i18n="office_hours">Пн-Сб 09:00–19:00</p>
+    </div>
+    <div class="usp">
+      <strong data-i18n="phone_label">Телефон</strong>
+      <p><a href="tel:+380987531466">+380987531466</a></p>
+      <p data-i18n="phone_apps">Viber/WhatsApp/Telegram</p>
+    </div>
+    <div class="usp">
+      <strong data-i18n="email_label">Email</strong>
+      <p><a href="mailto:ybcars.auto@gmail.com">ybcars.auto@gmail.com</a></p>
+    </div>
+    <div class="usp">
+      <strong data-i18n="form_label">Зв’язатися</strong>
+      <form id="contactForm" action="https://formspree.io/f/movnkvae" method="POST">
+        <div style="display:grid; gap:8px">
+          <input required name="name" placeholder="Ім’я" data-i18n-placeholder="placeholder_name" style="padding:.7rem .8rem; border-radius:10px; border:1px solid #23304d; background:#0a1224; color:#e6ecfa;">
+          <input required type="email" name="email" placeholder="Email" data-i18n-placeholder="placeholder_email" style="padding:.7rem .8rem; border-radius:10px; border:1px solid #23304d; background:#0a1224; color:#e6ecfa;">
+          <input name="phone" placeholder="Телефон" data-i18n-placeholder="placeholder_phone" style="padding:.7rem .8rem; border-radius:10px; border:1px solid #23304d; background:#0a1224; color:#e6ecfa;">
+          <textarea name="msg" rows="3" placeholder="Повідомлення" data-i18n-placeholder="placeholder_message" style="resize:vertical; border-radius:10px; border:1px solid #23304d; background:#0a1224; color:#e6ecfa; padding:.7rem .8rem;"></textarea>
+          <button class="btn primary" type="submit" style="padding:.7rem; border:none; border-radius:10px; background:#1a73e8; color:white; cursor:pointer;" data-i18n="form_send">Надіслати</button>
+          <small style="color:#9fb0c9" data-i18n="form_privacy">Натискаючи “Надіслати”, ви погоджуєтесь із політикою конфіденційності.</small>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="successMessage" style="display:none; background:#4BB543; color:white; padding:10px 15px; border-radius:10px; margin-top:10px; position:fixed; top:20px; right:20px; box-shadow:0 4px 6px rgba(0,0,0,0.2); z-index:1000;" data-i18n="success_message">
+    Дякуємо! Ваше повідомлення надіслано.
+  </div>
+</section>
+
+<script>
+  // Year in footer (keep)
+  document.getElementById('year')?.textContent = new Date().getFullYear();
+</script>
+
+  <footer>
+    <div class="container foot">
+      <div>
+        <div class="brand"><div class="logo">YB</div> <span data-i18n="brand_title">Y&B CARS</span></div>
+        <p style="color:#c7cfdb" data-i18n="footer_tag">Продаж і підбір авто. Легко. Прозоро. Швидко.</p>
+      </div>
+      <div>
+        <strong data-i18n="company">Компанія</strong><br>
+        <a href="#about" data-i18n="footer_about">Про нас</a><br>
+        <a href="#finance" data-i18n="footer_services">Послуги</a><br>
+        <a href="#contacts" data-i18n="footer_contacts">Контакти</a>
+      </div>
+      <div>
+        <strong data-i18n="legal">Правове</strong><br>
+        <a href="#" data-i18n="privacy">Політика конфіденційності</a><br>
+        <a href="#" data-i18n="terms">Умови користування</a>
+      </div>
+    </div>
+    <div class="container copyright">
+      © <span id="year"></span> Y&B CARS. <span data-i18n="all_rights">Усі права захищено.</span>
+    </div>
+  </footer>
+
+  <!-- Quick View Modal -->
+  <dialog id="quickModal" aria-label="Швидкий перегляд авто">
+    <div class="modal-head">
+      <strong id="qmTitle">Авто</strong>
+      <button class="close-x" id="qmClose" data-i18n="close_btn">Закрити ✕</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <img id="qmImg" src="" alt="" style="width:100%;border-radius:12px">
+      </div>
+      <div>
+        <div class="specs" id="qmSpecs"></div>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <a class="btn primary" href="#contacts" data-i18n="book_view">Записатись на перегляд</a>
+          <a class="btn" href="#contacts" data-i18n="ask_question">Поставити запитання</a>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    // Quick modal & cards behavior (updated to use translation labels for specs)
+    document.querySelectorAll('.slider').forEach(slider => {
+      const slides = slider.querySelector('.slides');
+      const imgs = slides.querySelectorAll('img');
+      const prevBtn = slider.querySelector('.prev');
+      const nextBtn = slider.querySelector('.next');
+      let index = 0;
+      function showSlide(i) {
+        if (i < 0) i = imgs.length - 1;
+        if (i >= imgs.length) i = 0;
+        index = i;
+        slides.style.transform = `translateX(-${index * 100}%)`;
+      }
+      prevBtn?.addEventListener('click', () => showSlide(index - 1));
+      nextBtn?.addEventListener('click', () => showSlide(index + 1));
+    });
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Quick view modal (uses i18n translation keys for labels)
+    const modal = document.getElementById('quickModal');
+    const qmClose = document.getElementById('qmClose');
+    document.querySelectorAll('[data-quick]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const card = btn.closest('.card');
+        const title = `${card.dataset.make} ${card.dataset.model}`;
+        const img = card.querySelector('img')?.src || '';
+        const i18n = window._i18n || {}; // filled by language script below
+        const specs = `
+          <div class="row"><span>${i18n['label_make_model']||'Марка/Модель'}</span><strong>${card.dataset.make} ${card.dataset.model}</strong></div>
+          <div class="row"><span>${i18n['label_body']||'Кузов'}</span><strong>${card.dataset.body||''}</strong></div>
+          <div class="row"><span>${i18n['label_fuel']||'Паливо'}</span><strong>${card.dataset.fuel||''}</strong></div>
+          <div class="row"><span>${i18n['label_year']||'Рік'}</span><strong>${card.dataset.year||''}</strong></div>
+          <div class="row"><span>${i18n['label_mileage']||'Пробіг'}</span><strong>${Number(card.dataset.mileage||0).toLocaleString('uk-UA')} км</strong></div>
+          <div class="row"><span>${i18n['label_price']||'Ціна'}</span><strong>€${Number(card.dataset.price||0).toLocaleString('uk-UA')}</strong></div>
+        `;
+        document.getElementById('qmTitle').textContent = title;
+        document.getElementById('qmImg').src = img;
+        document.getElementById('qmImg').alt = title;
+        document.getElementById('qmSpecs').innerHTML = specs;
+        modal.showModal();
+      });
+    });
+    qmClose.addEventListener('click', ()=>modal.close());
+    modal.addEventListener('click', e=>{ if(e.target === modal) modal.close(); });
+
+    // Minimal “submit” mock for contact form (keeps previous behaviour)
+    document.getElementById('contactForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      // show success message (translated)
+      const msg = window._i18n?.success_message || 'Дякуємо! Ваше повідомлення надіслано.';
+      alert(msg);
+      e.target.reset();
+    });
+  </script>
+</div>
+
+<!-- Language chooser popup -->
+<div id="langPopup" aria-hidden="false">
+  <div class="popup-content" role="dialog" aria-modal="true" aria-label="Вибір мови">
+    <h3 data-i18n="popup_title">🌍 Виберіть мову / Choose your language / Kies uw taal</h3>
+    <div class="lang-buttons">
+      <button class="lang-btn" data-lang="uk">🇺🇦 Українська</button>
+      <button class="lang-btn" data-lang="en">🇬🇧 English</button>
+      <button class="lang-btn" data-lang="nl">🇳🇱 Nederlands</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ========== Translations (keys correspond to data-i18n attrs) ========== */
+const TRANSLATIONS = {
+  uk: {
+    /* uk are defaults — keep for completeness */
+    title: "Y&B CARS — Продаж авто з пробігом та нових",
+    brand_title: "Y&B CARS",
+    brand_tag: "Авто поруч із вами",
+    nav_catalog: "Каталог",
+    nav_finance: "Фінансування",
+    nav_tradein: "Трейд-ін",
+    nav_about: "Про нас",
+    nav_contacts: "Контакти",
+    hero_prefix: "Продаж авто в",
+    hero_lead: "У Y&B Cars ми робимо покупку авто легкою та приємною 😊. Від економічних моделей до преміальних автомобілів – у нас знайдеться саме те, що відповідає вашому стилю життя та потребам 🌟.\n\nПрозорі умови ✅, чесна консультація 🗣️ та підтримка на кожному кроці 🤝 – ми поруч, щоб ваша дорога починалася з упевненості.\n\nВибирайте Y&B Cars – і ваш автомобіль стане справжнім джерелом радості та комфорту щодня 🚘💨.",
+    stat_stock: "✔️ 150+ авто на складі",
+    stat_warranty: "🛡️ 6 міс. гарантії",
+    catalog_title: "Авто в наявності",
+    catalog_sub: "Оновлюємо щодня. Вказані реальні фото та характеристики.",
+    status_available: "В наявності",
+    btn_quick: "Швидкий перегляд",
+    btn_reserve: "Забронювати",
+    usp_history: "Перевірка історії",
+    usp_history_text: "VIN-звіт, сервісна історія, перевірка на ДТП та обмеження.",
+    usp_warranty: "Гарантія",
+    usp_warranty_text: "До 6 місяців на основні вузли та агрегати.",
+    testi_title: "Нас радять друзі",
+    testi_sub: "4.9/5 на основі 1200+ відгуків",
+    testi1: "“Швидко підібрали авто під мій бюджет. Документи оформили за день.”",
+    testi2: "“Чітка діагностика, прозорий стан. Приємно мати справу!”",
+    testi3: "“Залишив своє авто по трейд-ін — доплатив і забрав SUV мрії.”",
+    cta_title: "Не знайшли потрібне авто?",
+    cta_text: "Залиште заявку — знайдемо за 48 годин у партнерській мережі.",
+    cta_btn: "Залишити заявку",
+    about_title: "Про Y&B CARS",
+    about_sub: "У Y&B Cars працюють справжні експерти 🚗💡. Ми допомагаємо обрати авто, даємо чесні поради та забезпечуємо комфортну покупку ✅.\n\nКожен клієнт для нас важливий, а ваша безпека і задоволення – наш пріоритет 🤝. З Y&B Cars ви завжди у надійних руках!",
+    contacts_title: "Контакти",
+    contacts_sub: "Приїжджайте на тест-драйв або напишіть нам.",
+    office_loc: "Antwerp, Belgium",
+    office_hours: "Пн-Сб 09:00–19:00",
+    phone_label: "Телефон",
+    phone_apps: "Viber/WhatsApp/Telegram",
+    email_label: "Email",
+    form_label: "Зв’язатися",
+    placeholder_name: "Ім’я",
+    placeholder_email: "Email",
+    placeholder_phone: "Телефон",
+    placeholder_message: "Повідомлення",
+    form_send: "Надіслати",
+    form_privacy: "Натискаючи “Надіслати”, ви погоджуєтесь із політикою конфіденційності.",
+    success_message: "Дякуємо! Ваше повідомлення надіслано.",
+    footer_tag: "Продаж і підбір авто. Легко. Прозоро. Швидко.",
+    company: "Компанія",
+    footer_about: "Про нас",
+    footer_services: "Послуги",
+    footer_contacts: "Контакти",
+    legal: "Правове",
+    privacy: "Політика конфіденційності",
+    terms: "Умови користування",
+    all_rights: "Усі права захищено.",
+    close_btn: "Закрити ✕",
+    book_view: "Записатись на перегляд",
+    ask_question: "Поставити запитання",
+    /* labels for modal */
+    label_make_model: "Марка/Модель",
+    label_body: "Кузов",
+    label_fuel: "Паливо",
+    label_year: "Рік",
+    label_mileage: "Пробіг",
+    label_price: "Ціна",
+    intro_text: "Y&B CARS – твій надійний автодруг 🚘"
+  },
+  en: {
+    title: "Y&B CARS — Car sales (used & new)",
+    brand_title: "Y&B CARS",
+    brand_tag: "Cars near you",
+    nav_catalog: "Catalog",
+    nav_finance: "Financing",
+    nav_tradein: "Trade-in",
+    nav_about: "About us",
+    nav_contacts: "Contacts",
+    hero_prefix: "Car sales at",
+    hero_lead: "At Y&B Cars, we make car buying easy and enjoyable 😊. From budget to premium models — we have something that fits your lifestyle 🌟.\n\nTransparent conditions ✅, honest advice 🗣️, and support at every step 🤝 — we are here to make your journey confident.\n\nChoose Y&B Cars — your car will bring you joy and comfort every day 🚘💨.",
+    stat_stock: "✔️ 150+ cars in stock",
+    stat_warranty: "🛡️ 6-month warranty",
+    catalog_title: "Cars in stock",
+    catalog_sub: "Updated daily. Real photos and specs.",
+    status_available: "Available",
+    btn_quick: "Quick view",
+    btn_reserve: "Reserve",
+    usp_history: "History check",
+    usp_history_text: "VIN report, service history, accident and restriction check.",
+    usp_warranty: "Warranty",
+    usp_warranty_text: "Up to 6 months for main components.",
+    testi_title: "Friends recommend us",
+    testi_sub: "4.9/5 based on 1200+ reviews",
+    testi1: "“They found a car for my budget quickly. Paperwork done in a day.”",
+    testi2: "“Clear diagnostics, transparent condition. Pleasant to work with!”",
+    testi3: "“I traded my car — paid the difference and got my dream SUV.”",
+    cta_title: "Didn't find the right car?",
+    cta_text: "Leave a request — we'll find it within 48 hours in our partner network.",
+    cta_btn: "Leave a request",
+    about_title: "About Y&B CARS",
+    about_sub: "At Y&B Cars real experts work 🚗💡. We help you choose a car, give honest advice and ensure a comfortable purchase ✅.\n\nEvery customer is important to us; your safety and satisfaction are our priority 🤝. With Y&B Cars you are always in good hands!",
+    contacts_title: "Contacts",
+    contacts_sub: "Come for a test drive or send us a message.",
+    office_loc: "Antwerp, Belgium",
+    office_hours: "Mon–Sat 09:00–19:00",
+    phone_label: "Phone",
+    phone_apps: "Viber/WhatsApp/Telegram",
+    email_label: "Email",
+    form_label: "Contact us",
+    placeholder_name: "Name",
+    placeholder_email: "Email",
+    placeholder_phone: "Phone",
+    placeholder_message: "Message",
+    form_send: "Send",
+    form_privacy: "By clicking 'Send', you agree to our privacy policy.",
+    success_message: "Thank you! Your message has been sent.",
+    footer_tag: "Car sales and selection. Easy. Transparent. Fast.",
+    company: "Company",
+    footer_about: "About us",
+    footer_services: "Services",
+    footer_contacts: "Contacts",
+    legal: "Legal",
+    privacy: "Privacy policy",
+    terms: "Terms of use",
+    all_rights: "All rights reserved.",
+    close_btn: "Close ✕",
+    book_view: "Book a viewing",
+    ask_question: "Ask a question",
+    label_make_model: "Make/Model",
+    label_body: "Body type",
+    label_fuel: "Fuel",
+    label_year: "Year",
+    label_mileage: "Mileage",
+    label_price: "Price",
+    intro_text: "Y&B CARS — your trusted car friend 🚘"
+  },
+  nl: {
+    title: "Y&B CARS — Autoverkoop (gebruikte & nieuwe)",
+    brand_title: "Y&B CARS",
+    brand_tag: "Auto's bij u in de buurt",
+    nav_catalog: "Catalogus",
+    nav_finance: "Financiering",
+    nav_tradein: "Inruil",
+    nav_about: "Over ons",
+    nav_contacts: "Contacten",
+    hero_prefix: "Autoverkoop bij",
+    hero_lead: "Bij Y&B Cars maken we het kopen van een auto eenvoudig en plezierig 😊. Van voordelige tot premium modellen — we hebben iets dat past bij uw levensstijl 🌟.\n\nTransparante voorwaarden ✅, eerlijk advies 🗣️ en ondersteuning bij elke stap 🤝 — wij staan voor u klaar.\n\nKies Y&B Cars — uw auto zal elke dag voor plezier en comfort zorgen 🚘💨.",
+    stat_stock: "✔️ 150+ auto's op voorraad",
+    stat_warranty: "🛡️ 6 maanden garantie",
+    catalog_title: "Beschikbare auto's",
+    catalog_sub: "Dagelijks bijgewerkt. Echte foto's en specificaties.",
+    status_available: "Beschikbaar",
+    btn_quick: "Snelle weergave",
+    btn_reserve: "Reserveren",
+    usp_history: "Geschiedeniscontrole",
+    usp_history_text: "VIN-rapport, onderhoudsgeschiedenis, ongevallen- en beperkingscontrole.",
+    usp_warranty: "Garantie",
+    usp_warranty_text: "Tot 6 maanden op hoofdonderdelen.",
+    testi_title: "Aanbevolen door vrienden",
+    testi_sub: "4.9/5 op basis van 1200+ beoordelingen",
+    testi1: "“Binnenkort een auto gevonden binnen mijn budget. Papieren in één dag afgerond.”",
+    testi2: "“Duidelijke diagnose, transparante staat. Fijn samenwerken!”",
+    testi3: "“Mijn auto ingeruild — bijbetaald en mijn droom-SUV opgehaald.”",
+    cta_title: "Niet de juiste auto gevonden?",
+    cta_text: "Laat een aanvraag achter — wij vinden hem binnen 48 uur via ons netwerk.",
+    cta_btn: "Aanvraag indienen",
+    about_title: "Over Y&B CARS",
+    about_sub: "Bij Y&B Cars werken echte experts 🚗💡. We helpen u een auto kiezen, geven eerlijk advies en zorgen voor een comfortabele aankoop ✅.\n\nElke klant is belangrijk voor ons; uw veiligheid en tevredenheid zijn onze prioriteit 🤝. Met Y&B Cars zit u altijd goed!",
+    contacts_title: "Contacten",
+    contacts_sub: "Kom langs voor een proefrit of stuur ons een bericht.",
+    office_loc: "Antwerpen, België",
+    office_hours: "Ma–Za 09:00–19:00",
+    phone_label: "Telefoon",
+    phone_apps: "Viber/WhatsApp/Telegram",
+    email_label: "Email",
+    form_label: "Contact opnemen",
+    placeholder_name: "Naam",
+    placeholder_email: "Email",
+    placeholder_phone: "Telefoon",
+    placeholder_message: "Bericht",
+    form_send: "Verzenden",
+    form_privacy: "Door op 'Verzenden' te klikken gaat u akkoord met het privacybeleid.",
+    success_message: "Bedankt! Uw bericht is verzonden.",
+    footer_tag: "Autoverkoop en selectie. Eenvoudig. Transparant. Snel.",
+    company: "Bedrijf",
+    footer_about: "Over ons",
+    footer_services: "Diensten",
+    footer_contacts: "Contacten",
+    legal: "Juridisch",
+    privacy: "Privacybeleid",
+    terms: "Gebruiksvoorwaarden",
+    all_rights: "Alle rechten voorbehouden.",
+    close_btn: "Sluiten ✕",
+    book_view: "Bezichtiging plannen",
+    ask_question: "Vraag stellen",
+    label_make_model: "Merk/Model",
+    label_body: "Carrosserie",
+    label_fuel: "Brandstof",
+    label_year: "Jaar",
+    label_mileage: "Kilometerstand",
+    label_price: "Prijs",
+    intro_text: "Y&B CARS — uw betrouwbare auto-vriend 🚘"
+  }
+};
+
+/* Utility: set text for elements with data-i18n; set placeholders for data-i18n-placeholder */
+function applyLang(lang) {
+  const dict = TRANSLATIONS[lang] || {};
+  window._i18n = dict; // expose for other scripts (modal)
+  // set <html lang="...">
+  document.documentElement.lang = lang;
+
+  // attributes replacement
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key] !== undefined) {
+      // preserve innerHTML vs textContent depending on element
+      // Use textContent for safety unless original contains HTML
+      el.textContent = dict[key];
+    }
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (dict[key] !== undefined) el.placeholder = dict[key];
+  });
+
+  // Also update content of some well-known elements not using data-i18n attributes:
+  if (dict.title) document.title = dict.title;
+  // Update modal spec labels are read from window._i18n
+}
+
+/* Popup logic + persistence */
+const savedLang = localStorage.getItem('lang');
+const popup = document.getElementById('langPopup');
+const langButtons = document.querySelectorAll('.lang-btn');
+const inlineSelect = document.getElementById('langSelect');
+
+if (savedLang) {
+  applyLang(savedLang);
+  popup.style.display = 'none';
+  if (inlineSelect) inlineSelect.value = savedLang;
+} else {
+  popup.style.display = 'flex';
+}
+
+// Buttons in popup
+langButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const lang = btn.dataset.lang;
+    localStorage.setItem('lang', lang);
+    applyLang(lang);
+    popup.style.display = 'none';
+    if (inlineSelect) inlineSelect.value = lang;
+  });
+});
+
+// Optional inline small selector (if you later show it)
+if (inlineSelect) {
+  inlineSelect.addEventListener('change', (e) => {
+    const lang = e.target.value;
+    localStorage.setItem('lang', lang);
+    applyLang(lang);
+  });
+}
+
+// Hide intro after typing (original typing script)
+const fullText = TRANSLATIONS['en'].intro_text || "Y&B CARS – твій надійний автодруг 🚘";
+const textElement = document.getElementById("text");
+let idx = 0;
+function type() {
+  if (idx < fullText.length) {
+    let char = fullText.charAt(idx);
+    if (idx < 7) {
+      textElement.innerHTML += `<span class="gradient">${char}</span>`;
+    } else {
+      textElement.innerHTML += char;
+    }
+    idx++;
+    setTimeout(type, 40);
+  } else {
+    setTimeout(showMainContent, 600);
+  }
+}
+function showMainContent(){
+  const intro = document.getElementById("intro");
+  intro.style.opacity = 0;
+  setTimeout(()=>{
+    intro.style.display = "none";
+    const main = document.getElementById("main-content");
+    main.style.opacity = 1;
+  }, 800);
+}
+window.onload = type;
+</script>
+
+</body>
+</html>
