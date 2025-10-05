@@ -608,8 +608,16 @@ document.querySelectorAll('.slider').forEach(slider => {
     index = i;
     slides.style.transform = `translateX(-${index * 100}%)`;
   }
-  prevBtn?.addEventListener('click', () => showSlide(index - 1));
-  nextBtn?.addEventListener('click', () => showSlide(index + 1));
+  prevBtn.addEventListener('click', () => showSlide(index - 1));
+nextBtn.addEventListener('click', () => showSlide(index + 1));
+});
+
+/* === FIX: вимикаємо слайдер і показуємо всі авто === */
+document.querySelectorAll('.slides').forEach(slides => {
+  slides.style.display = 'grid';
+  slides.style.gridTemplateColumns = 'repeat(2, 1fr)';
+  slides.style.gap = '20px';
+  slides.style.transform = 'none';
 });
 </script>
 <!-- Finance / Trade-in / USP -->
